@@ -225,6 +225,8 @@ font-size:22px;
 
 <script>
 
+const diceSound = new Audio("https://assets.mixkit.co/active_storage/sfx/2073/2073-preview.mp3")    
+
 let players=[]
 let results=[]
 let current=0
@@ -327,6 +329,9 @@ function rollDice(){
 if(rolling) return
 rolling=true
 
+diceSound.currentTime=0
+diceSound.play()
+
 if(Math.random()<0.07){
 
 result.innerText="💦 ションベン！振り直し！"
@@ -396,9 +401,17 @@ let text=""
 let score=0
 
 if(nums[0]==1&&nums[1]==1&&nums[2]==1){
-text="🎉ピンゾロ🎉"
+text="🎉🎉🎉 ピンゾロ！！！ 🎉🎉🎉"
 score=100
+
+document.body.style.background="#ffd700"
+
+setTimeout(()=>{
+document.body.style.background="#f4f4f4"
+},1200)
+
 }
+
 else if(nums[0]==nums[1]&&nums[1]==nums[2]){
 text="アラシ"
 score=80
