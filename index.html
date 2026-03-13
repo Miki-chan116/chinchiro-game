@@ -101,16 +101,6 @@ justify-self:center;
 align-self:center;
 }
 
-.roll{
-animation:roll 0.7s;
-}
-
-@keyframes roll{
-0%{transform:rotate(0deg)}
-50%{transform:rotate(360deg)}
-100%{transform:rotate(720deg)}
-}
-
 .shake{
 animation:shake 0.6s;
 }
@@ -238,6 +228,7 @@ font-size:22px;
 let players=[]
 let results=[]
 let current=0
+let rolling=false
 
 function showSetup(){
 title.style.display="none"
@@ -268,7 +259,7 @@ after.innerHTML=""
 
 function makeInputs(){
 
-let n=playerCount.value
+let n=parseInt(playerCount.value)
 let html=""
 
 for(let i=0;i<n;i++){
@@ -287,11 +278,15 @@ players=[]
 results=[]
 current=0
 
-let n=playerCount.value
+let n=parseInt(playerCount.value)
 
 for(let i=0;i<n;i++){
 
-let name=document.getElementById("p"+i).value || "プレイヤー"+(i+1)
+let name=document.getElementById("p"+i).value.trim()
+
+if(name===""){
+name="プレイヤー"+(i+1)
+}
 
 players.push(name)
 
@@ -329,13 +324,15 @@ drawTurnList()
 
 function rollDice(){
 
+if(rolling) return
+rolling=true
 
-// ションベンイベント
-if(Math.random() < 0.07){
+if(Math.random()<0.07){
 
 result.innerText="💦 ションベン！振り直し！"
 
 setTimeout(()=>{
+rolling=false
 rollDice()
 },1200)
 
@@ -354,9 +351,7 @@ drawDice(d2,dice[1])
 drawDice(d3,dice[2])
 
 bowlCover.classList.remove("coverOn")
-
 bowl.classList.remove("shake")
-
 
 judge(dice)
 
@@ -365,9 +360,7 @@ judge(dice)
 }
 
 function random(){
-
 return Math.floor(Math.random()*6)+1
-
 }
 
 function drawDice(el,num){
@@ -439,7 +432,10 @@ score:score,
 role:text
 })
 
-setTimeout(nextPlayer,1200)
+setTimeout(()=>{
+rolling=false
+nextPlayer()
+},1200)
 
 }
 
@@ -504,8 +500,4 @@ showPlayer()
 </script>
 
 </body>
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> 41a280a9f01458cf85b403bf4c61b559e33eb97e
